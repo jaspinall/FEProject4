@@ -7,7 +7,8 @@ var Enemy = function() {
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
     this.x = 0;
-    this.y = ((Math.floor(Math.random() * 3)) * 100) + 100;
+    this.y = (Math.floor(Math.random() * 3) * 83) + 42;
+    this.width = 60;
 };
 
 // Update the enemy's position, required method for game
@@ -16,11 +17,12 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    var speed = Math.floor(Math.random() * 700);
     if (this.x < 500) {
-        this.x = (this.x + (100 * dt));
+        this.x = (this.x + (speed * dt));
     } else {
         this.x = 0;
-        this.y = ((Math.floor(Math.random() * 3)) * 100) + 100;
+        this.y = (Math.floor(Math.random() * 3) * 83) + 42;
     }
 };
 
@@ -35,11 +37,12 @@ Enemy.prototype.render = function() {
 var Player = function() {
     this.hero = 'images/char-pink-girl.png';
     this.x = 200;
-    this.y = 400;
+    this.y = 374;
+    this.width = 40;
 };
 
 Player.prototype.update = function(dt) {
-   
+
 };
 
 
@@ -54,14 +57,32 @@ Player.prototype.handleInput = function(key) {
     else if (key === 'right' && this.x < 400) {
         this.x += 100;
     }
-    else if (key === 'down' && this.y < 400) {
-        this.y += 100;
+    else if (key === 'down' && this.y < 374) {
+        this.y += 83;
+        console.log(this.y)
     }
-    else if (key === 'up' && this.y > 0) {
-        this.y -= 100;
+    else if (key === 'up' && this.y >= 42) {
+        this.y -= 83;
     }
-    ctx.drawImage(Resources.get(this.player), this.x, this.y);
+    else if (key === 'up' && this.y < 42) {
+        this.y = 374;
+    }
+    ctx.drawImage(Resources.get(this.hero), this.x, this.y);
 };
+
+Player.prototype.checkCollisions = function() {
+    var height = 83;
+    for (var i=0; i<3; i++) {
+        if (this.x < allEnemies[i].x + allEnemies[i].width &&
+            this.x + this.width > allEnemies[i].x &&
+            this.y < allEnemies[i].y + height &&
+            this.y + height > allEnemies[i].y) {
+
+            this.y = 374;
+        }
+    }
+    ctx.drawImage(Resources.get(this.hero), this.x, this.y);
+}
 
 
 // Now instantiate your objects.
@@ -81,6 +102,7 @@ function generateEnemies(){
 };
 
 generateEnemies();
+
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.

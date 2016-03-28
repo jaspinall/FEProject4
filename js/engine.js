@@ -64,7 +64,7 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
-        reset();
+        //reset();
         lastTime = Date.now();
         main();
     }
@@ -80,7 +80,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        player.checkCollisions();
     }
 
     /* This is called by the update function and loops through all of the
@@ -158,15 +158,18 @@ var Engine = (function(global) {
      * handle game reset states - maybe a new game menu or a game over screen
      * those sorts of things. It's only called once by the init() method.
      */
+     /*
     function reset() {
-        // noop
-    }
+        ctx.clearRect(0, 0, 505, 606);
+        ctx.drawImage(Resources.get('images/start.png'), 0, 0, 505, 606);
+    }*/
 
     /* Go ahead and load all of the images we know we're going to need to
      * draw our game level. Then set init as the callback method, so that when
      * all of these images are properly loaded our game will start.
      */
     Resources.load([
+        'images/start.png',
         'images/stone-block.png',
         'images/water-block.png',
         'images/grass-block.png',
