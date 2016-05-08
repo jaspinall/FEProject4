@@ -6,6 +6,7 @@ var Enemy = function() {
     this.x = 0;
     this.y = (Math.floor(Math.random() * 3) * 83) + 60;
     this.width = 60;
+    this.speed = Math.floor(Math.random() * 700);
 };
 
 // Update the enemy's position, required method for game
@@ -14,9 +15,8 @@ Enemy.prototype.update = function(dt) {
     // Multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    var speed = Math.floor(Math.random() * 700);
     if (this.x < 500) {
-        this.x = (this.x + (speed * dt));
+        this.x = (this.x + (this.speed * dt));
     } else {
         this.x = 0;
         this.y = (Math.floor(Math.random() * 3) * 83) + 60;
@@ -40,11 +40,17 @@ var Player = function() {
 Player.prototype.reset = function(dt) {
     this.x = 200;
     this.y = 405;
+    alert("Congrats! You won!");
 };
 
 // Draw the player on the game board
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.hero), this.x, this.y);
+};
+
+// Reset player after a delay of 1 second
+Player.prototype.delayStart = function() {
+    window.setTimeout(this.reset.bind(this), 500);
 };
 
 // Translate key presses to the player's movement on the game board
@@ -62,10 +68,7 @@ Player.prototype.handleInput = function(key) {
         this.y -= 83;
     }
     if (this.y < 42) {
-        setTimeout( function() {
-            player.reset();
-            alert("Congrats! You won!");
-        }, 1000);
+        this.delayStart();
     }
 };
 
@@ -82,7 +85,6 @@ Player.prototype.checkCollisions = function() {
     }
     ctx.drawImage(Resources.get(this.hero), this.x, this.y);
 }
-
 
 // Object instantiation
 
